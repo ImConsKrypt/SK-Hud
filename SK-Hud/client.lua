@@ -29,6 +29,7 @@ local function updateStats()
                 health = health,
                 armor = armor,
                 stamina = stamina,
+                oxygen = oxygen,
                 isTalking = isTalking,
                 talkingOnRadio = talkingOnRadio,
                 onRadio = onRadio,
@@ -48,6 +49,7 @@ local function ToggleHud(bool)
             health = health,
             armor = armor,
             stamina = stamina,
+            oxygen = oxygen,
             isTalking = isTalking,
             talkingOnRadio = talkingOnRadio,
             onRadio = onRadio,
@@ -99,7 +101,7 @@ local function getVehicleHealth(vehicle)
         lastHealthUpdate = updateTick
         lastHealthCheck = {
             Body = math.floor(GetVehicleBodyHealth(vehicle) / 10),
-            Engine = math.floor(GetVehicleEngineHealth(vehicle) / 10),
+            Engine = math.floor(GetVehicleEngineHealth(vehicle) / 10), -- TODO: ~ConsKrypt
         }
     end
     return lastHealthCheck
