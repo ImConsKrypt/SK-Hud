@@ -5,6 +5,7 @@ local showingHUD = true
 local health = 0
 local armor = 0
 local stamina = 0
+local oxygen = 0
 local isTalking = false
 local talkingOnRadio = false
 local onRadio = false
@@ -289,6 +290,7 @@ CreateThread(function()
         if isDead then health = 0 end
         armor = GetPedArmour(ped)
         stamina = GetPlayerStamina(PlayerId())
+        oxygen = GetPlayerUnderwaterTimeRemaining(PlayerId()) * 10
         isTalking = NetworkIsPlayerTalking(playerId) == 1
         onRadio = LocalPlayer.state['radioChannel'] or 0 > 0
         onPhone = LocalPlayer.state['callChannel'] or 0 > 0
