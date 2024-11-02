@@ -4,6 +4,7 @@
     import { ReceiveEvent, SendEvent } from '@utils/eventsHandlers';
     import Status from '@components/status.svelte';
     import VehicleHud from '@components/vehicleHud.svelte';
+    import FinanceHud from '@components/financeHud.svelte';
     CONFIG.set({
         fallbackResourceName: 'debug',
         allowEscapeKey: true,
@@ -14,6 +15,7 @@
 <main>
     <Status/>
     <VehicleHud/>
+    <FinanceHud/>
 </main>
 
 <style>

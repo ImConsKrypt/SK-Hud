@@ -1,5 +1,8 @@
 Config = {}
 
+-- Valid frameworks are qbcore and esx
+Config.Framework = 'qbcore'
+
 Config.useMPH = true
 Config.minimapWalking = false
 Config.fuel = 'LegacyFuel'

@@ -1,3 +1,4 @@
+ESX = nil
 local QBCore = exports['qb-core']:GetCoreObject()
 local playerData = QBCore.Functions.GetPlayerData()
 local speedMultiplier = Config.useMPH and 2.23694 or 3.6
@@ -6,6 +7,10 @@ local health = 0
 local armor = 0
 local stamina = 0
 local oxygen = 0
+local cash = 0
+local bank = 0
+local lastCash = 0
+local lastBank = 0
 local isTalking = false
 local talkingOnRadio = false
 local onRadio = false
@@ -21,10 +26,12 @@ local lastCrossroadUpdate = 0
 local lastCrossroadCheck = nil
 local bool1 = Config.hudAlwaysOn
 
+local wasKeyPressed = false
+
 local function updateStats()
     if bool1 then
         SendNUIMessage({
-            action = 'updateStats', 
+            action = 'updateStats',
             data = {
                 showing = IsPauseMenuActive() == false and showingHUD or false,
                 health = health,
@@ -36,7 +43,7 @@ local function updateStats()
                 onRadio = onRadio,
                 onPhone = onPhone,
                 voiceRange = voiceRange,
-                stats = stats
+                stats = stats,
             }
         })
     end
@@ -62,13 +69,25 @@ local function ToggleHud(bool)
     bool1 = bool
 end
 
+local function updateMoney()
+    SendNUIMessage({
+        action = 'updateMoney',
+        data = {
+            showing = IsPauseMenuActive() == false or wasKeyPressed or false,
+            cash = cash,
+            bank = bank,
+            keyPressed = wasKeyPressed
+        }
+    })
+end
+
 exports("ToggleHud", ToggleHud)
 
 local function updateVehicleStats()
     if not cache.vehicle then return end
     local veh = cache.vehicle
     SendNUIMessage({
-        action = 'updateVehicle', 
+        action = 'updateVehicle',
         data = {
             showing = IsPauseMenuActive() == false and showingHUD or false,
             rpm = GetVehicleCurrentRpm(veh),
@@ -102,7 +121,7 @@ local function getVehicleHealth(vehicle)
         lastHealthUpdate = updateTick
         lastHealthCheck = {
             Body = math.floor(GetVehicleBodyHealth(vehicle) / 10),
-            Engine = math.floor(GetVehicleEngineHealth(vehicle) / 10), -- TODO: ~ConsKrypt
+            Engine = math.floor(GetVehicleEngineHealth(vehicle) / 10), -- TODO
         }
     end
     return lastHealthCheck
@@ -196,7 +215,7 @@ local function vehicleLoop(veh)
             Wait(50)
         end
         SendNUIMessage({
-            action = 'updateVehicle', 
+            action = 'updateVehicle',
             data = {showing = false, rpm = 0, speed = 0}
         })
     end)
@@ -280,8 +299,29 @@ CreateThread(function()
 end)
 
 CreateThread(function()
+    while true do
+        Wait(10)
+        playerData = QBCore.Functions.GetPlayerData()
+        bank = playerData.money.bank
+        cash = playerData.money.cash
+        updateMoney()
+    end
+
+end)
+
+RegisterCommand('+moneyHUD', function()
+    wasKeyPressed = true
+end)
+
+RegisterCommand('-moneyHUD', function()
+    wasKeyPressed = false
+end)
+
+RegisterKeyMapping('+moneyHUD', 'Displays Financial Information', 'keyboard', 'z')
+
+CreateThread(function()
     loadMap()
-    while true do        
+    while true do
         Wait(500)
         local ped = cache.ped
         local playerId = cache.playerId
@@ -290,11 +330,12 @@ CreateThread(function()
         if isDead then health = 0 end
         armor = GetPedArmour(ped)
         stamina = GetPlayerStamina(PlayerId())
-        oxygen = GetPlayerUnderwaterTimeRemaining(PlayerId()) * 10
         isTalking = NetworkIsPlayerTalking(playerId) == 1
         onRadio = LocalPlayer.state['radioChannel'] or 0 > 0
         onPhone = LocalPlayer.state['callChannel'] or 0 > 0
-        
+        oxygen = GetPlayerUnderwaterTimeRemaining(PlayerId()) * 10
+
+
         if cache.vehicle and not IsThisModelABicycle(cache.vehicle) then
             vehicleStats.fuel = getFuelLevel(cache.vehicle)
             vehicleStats.engine = (GetVehicleEngineHealth(cache.vehicle) / 10) < 50
@@ -386,3 +427,5 @@ RegisterNetEvent('hud:client:ToggleShowSeatbelt', function()
     vehicleStats.beltOn = not vehicleStats.beltOn
     updateVehicleStats()
 end)
+
+--AddEventHandler('')
