@@ -286,7 +286,7 @@ CreateThread(function()
         local isDead = IsEntityDead(ped) or false
         if isDead then health = 0 end
         armor = GetPedArmour(ped)
-        stamina = GetPlayerStamina(ped)
+        stamina = GetPlayerStamina(PlayerId())
         isTalking = NetworkIsPlayerTalking(playerId) == 1
         onRadio = LocalPlayer.state['radioChannel'] or 0 > 0
         onPhone = LocalPlayer.state['callChannel'] or 0 > 0
