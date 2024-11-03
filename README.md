@@ -1,7 +1,7 @@
 # SK-Hud
 SK-Hud (ProdigyRP Inspired)
 
-Original Author: </SK> (https://sk-developments.com)
+Original Author: SK (https://sk-developments.com)
 
 **FOR QBCore framework!**
 
@@ -23,4 +23,4 @@ A 3Dish HUD inspired by ProdigyRP.
  - Update financial status information to a more advanced system
 
 ## Credits
-Thanks to </SK> for the inital release and granting permission for me to be able to modify and release my edits.
+Thanks to SK for the inital release and granting permission for me to be able to modify and release my edits.
