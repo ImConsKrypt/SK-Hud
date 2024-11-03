@@ -5,6 +5,8 @@
     let visible: boolean = false;
     let health: number = 47;
     let armor: number = 10;
+    let stamina: number = 10;
+    let oxygen: number = 10;
     let talking: boolean = false;
     let talkingOnRadio: boolean = false;
     let onRadio: boolean = false;
@@ -16,10 +18,12 @@
         stress: 10,
     }
     let statOrder: Array<string> = ['hunger', 'thirst', 'stress']
-    ReceiveEvent('updateStats', (data: {showing: boolean, health: number, armor: number, isTalking: boolean, talkingOnRadio: boolean, onRadio: boolean, onPhone: boolean, voiceRange: number, stats: {[key:string]: number}} ): void =>{
+    ReceiveEvent('updateStats', (data: {showing: boolean, health: number, armor: number, isTalking: boolean, talkingOnRadio: boolean, onRadio: boolean, onPhone: boolean, voiceRange: number, stats: {[key:string]: number}, stamina: number, oxygen: number} ): void =>{
         visible = data.showing;
         health = data.health;
         armor = data.armor;
+        stamina = data.stamina;
+        oxygen = data.oxygen;
         talking = data.isTalking;
         talkingOnRadio = data.talkingOnRadio;
         onRadio = data.onRadio;
@@ -74,7 +78,25 @@
                             </div>
                         {/if}
                     {/each}
+                    {#if stamina < 100}
+                    <div class="stat">
+                        <div class="statBarBase">
+                            <div class="statBar" style="height: {stamina}%; background-color: rgb(50, 145, 168); box-shadow: 0 0 0.5vh rgb(50, 145, 168);"></div>
+                        </div>
+                        <i class="fa-light fa-person-running barIcon"></i>
+                    </div>
+                    {/if}
+                    {#if oxygen < 100}
+                    <div class="stat">
+                        <div class="statBarBase">
+                            <div class="statBar" style="height: {oxygen}%; background-color: rgb(237, 154, 0); box-shadow: 0 0 0.5vh rgb(237, 154, 0);"></div>
+                        </div>
+                        <i class="fa-light fa-lungs barIcon"></i>
+                    </div>
+                    {/if}
                 </div>
+                
+                
             </div>
         </div>
     </div>
